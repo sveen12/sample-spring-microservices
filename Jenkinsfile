@@ -1,6 +1,6 @@
 node {
 
-    withMaven(maven:'maven') {
+    withMaven(maven:'Maven3') {
 
         stage('Checkout') {
             git url: 'https://github.com/sveen12/sample-spring-microservices.git', credentialsId: 'github-sveen12', branch: 'master'
@@ -26,7 +26,5 @@ node {
         stage ('Final') {
             build job: 'customer-service-pipeline', wait: false
         }      
-
     }
-
 }
