@@ -1,3 +1,6 @@
+ using hostname.
+
+[code language="java"]
 node {
 
     withMaven(maven:'maven') {
@@ -15,16 +18,17 @@ node {
         }
 
         stage('Image') {
-            dir ('gateway-service') {
-                def app = docker.build "localhost:5000/gateway-service:${env.version}"
-                app.push()
-            }
+            def app = docker.build "localhost:5000/account-service:${env.version}"
+            app.push()
         }
 
         stage ('Run') {
-            docker.image("localhost:5000/gateway-service:${env.version}").run('-p 3333:3333 -h gateway --name gateway --link discovery --link account --link customer')
+            docker.image("localhost:5000/account-service:${env.version}").run('-p 2222:2222 -h account --name account --link discovery')
         }
-     
+
+        stage ('Final') {
+            build job: 'customer-service-pipeline', wait: false
+        }      
 
     }
 
